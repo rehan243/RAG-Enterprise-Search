@@ -82,54 +82,6 @@ Built and deployed at **Verticiti** and **Reallytics.ai** for clients in healthc
 | **Data** | PostgreSQL, Redis (caching), Apache Airflow |
 | **API** | FastAPI, WebSockets (streaming) |
 
-## Project Structure
-
-```
-rag-enterprise-search/
-??? ingestion/
-?   ??? parsers/
-?   ?   ??? pdf_parser.py
-?   ?   ??? docx_parser.py
-?   ?   ??? html_parser.py
-?   ??? chunking/
-?   ?   ??? recursive_splitter.py
-?   ?   ??? semantic_splitter.py
-?   ?   ??? sliding_window.py
-?   ??? pipeline.py
-??? embeddings/
-?   ??? embedding_service.py
-?   ??? batch_embedder.py
-?   ??? models/
-??? vectorstores/
-?   ??? faiss_store.py
-?   ??? chroma_store.py
-?   ??? pgvector_store.py
-??? retrieval/
-?   ??? orchestrator.py
-?   ??? reranker.py
-?   ??? context_builder.py
-?   ??? fusion.py
-??? generation/
-?   ??? llm_chain.py
-?   ??? prompt_templates.py
-?   ??? citation_tracker.py
-?   ??? hallucination_detector.py
-??? api/
-?   ??? main.py
-?   ??? routes/
-?   ??? middleware/
-??? evaluation/
-?   ??? ragas_eval.py
-?   ??? retrieval_metrics.py
-?   ??? generation_metrics.py
-??? infrastructure/
-?   ??? Dockerfile
-?   ??? docker-compose.yml
-?   ??? sagemaker_deploy.py
-??? tests/
-??? requirements.txt
-??? README.md
-```
 
 ## Performance
 
@@ -142,25 +94,11 @@ rag-enterprise-search/
 | Answer accuracy (RAGAS) | 87% |
 | API cost reduction vs hosted models | 40% |
 
-## Getting Started
 
-```bash
-git clone https://github.com/rehan243/RAG-Enterprise-Search.git
-cd RAG-Enterprise-Search
+---
 
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+> **Source Code**: The production source code for this project is maintained in a private repository due to proprietary and client confidentiality requirements. This repository documents the architecture, design decisions, and technical approach. For code-level discussions or collaboration inquiries, feel free to reach out.
 
-# Start vector stores
-docker-compose up -d
-
-# Index documents
-python ingestion/pipeline.py --source ./data --chunk-size 512
-
-# Start API server
-uvicorn api.main:app --host 0.0.0.0 --port 8000
-```
 
 ## Author
 
