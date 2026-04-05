@@ -1,0 +1,18 @@
+chunking:
+  strategy: recursive
+  chunk_size: 512
+  chunk_overlap: 64
+  separators:
+    - "\n\n"
+    - "\n"
+    - ". "
+    - " "
+  metadata_fields:
+    - source
+    - page_number
+    - section_title
+    - created_at
+  embedding:
+    model: text-embedding-3-small
+    dimension: 1536
+    batch_size: 100
