@@ -1,39 +1,37 @@
 import pytest
-from search_module import SearchEngine  # assuming the search engine is in search_module
+from search_module import SearchEngine
 
-# test the search functionality of the SearchEngine class
-def test_search_with_valid_query():
-    search_engine = SearchEngine()
-    query = "machine learning"
-    results = search_engine.search(query)
-    
-    # check if results is a list
-    assert isinstance(results, list)
-    # check if we get some results back
-    assert len(results) > 0
+# simple test data
+mock_data = [
+    {"id": 1, "content": "apple pie recipe"},
+    {"id": 2, "content": "banana bread recipe"},
+    {"id": 3, "content": "cherry tart recipe"},
+]
 
-def test_search_with_empty_query():
-    search_engine = SearchEngine()
-    query = ""
-    results = search_engine.search(query)
-    
-    # expect no results for an empty query
-    assert results == []
+@pytest.fixture
+def search_engine():
+    # initialize the search engine with mock data
+    engine = SearchEngine()
+    engine.index_data(mock_data)
+    return engine
 
-def test_search_with_non_existent_query():
-    search_engine = SearchEngine()
-    query = "this query does not exist"
-    results = search_engine.search(query)
-    
-    # expect results to be empty
-    assert results == []
+def test_search_exact_match(search_engine):
+    results = search_engine.search("apple pie recipe")
+    assert len(results) == 1
+    assert results[0]["id"] == 1
 
-# TODO: add more tests to check result contents and ranking if needed
-def test_search_case_insensitivity():
-    search_engine = SearchEngine()
-    query = "Machine Learning"
-    results_upper = search_engine.search(query)
-    results_lower = search_engine.search(query.lower())
-    
-    # expect the same results regardless of case
-    assert results_upper == results_lower
+def test_search_partial_match(search_engine):
+    results = search_engine.search("banana")
+    assert len(results) == 1
+    assert results[0]["id"] == 2
+
+def test_search_no_results(search_engine):
+    results = search_engine.search("pizza")
+    assert len(results) == 0
+
+def test_search_case_insensitivity(search_engine):
+    results = search_engine.search("CHERRY TART RECIPE")
+    assert len(results) == 1
+    assert results[0]["id"] == 3
+
+# TODO: add more tests for edge cases and performance
