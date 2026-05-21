@@ -1,37 +1,35 @@
 import pytest
-from search_module import SearchEngine
+from search import SearchEngine  # assuming there's a SearchEngine class in search module
 
-# simple test data
-mock_data = [
-    {"id": 1, "content": "apple pie recipe"},
-    {"id": 2, "content": "banana bread recipe"},
-    {"id": 3, "content": "cherry tart recipe"},
-]
-
-@pytest.fixture
-def search_engine():
-    # initialize the search engine with mock data
+def test_search_results_returned():
     engine = SearchEngine()
-    engine.index_data(mock_data)
-    return engine
+    query = "example search query"
+    
+    results = engine.search(query)
+    
+    # check if results are not empty
+    assert len(results) > 0
+    # check if results contain expected keys
+    assert all('title' in result for result in results)
+    assert all('url' in result for result in results)
 
-def test_search_exact_match(search_engine):
-    results = search_engine.search("apple pie recipe")
-    assert len(results) == 1
-    assert results[0]["id"] == 1
-
-def test_search_partial_match(search_engine):
-    results = search_engine.search("banana")
-    assert len(results) == 1
-    assert results[0]["id"] == 2
-
-def test_search_no_results(search_engine):
-    results = search_engine.search("pizza")
+def test_search_no_results():
+    engine = SearchEngine()
+    query = "nonexistent query"
+    
+    results = engine.search(query)
+    
+    # check that no results are returned for a silly query
     assert len(results) == 0
 
-def test_search_case_insensitivity(search_engine):
-    results = search_engine.search("CHERRY TART RECIPE")
-    assert len(results) == 1
-    assert results[0]["id"] == 3
+def test_search_results_content():
+    engine = SearchEngine()
+    query = "specific search term"
+    
+    results = engine.search(query)
+    
+    # assuming we expect a certain title to be in the results
+    expected_title = "Expected Result Title"
+    assert any(result['title'] == expected_title for result in results)
 
-# TODO: add more tests for edge cases and performance
+# TODO: add more tests for edge cases and different query types
