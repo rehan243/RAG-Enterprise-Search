@@ -1,6 +1,6 @@
 """
-Dense + sparse + fusion. The cross-encoder lives in reranker.py because mixing concerns
-makes tests miserable.
+dense + sparse + fusion. the cross-encoder lives in reranker.py because mixing concerns
+makes tests miserable
 """
 from __future__ import annotations
 
@@ -63,7 +63,7 @@ class HybridRetriever:
             raise ValueError("embed_fn is required for dense retrieval")
 
     def update_corpus_text(self, mapping: Dict[str, str]) -> None:
-        """Hydrate chunk bodies for downstream rerankers (optional)."""
+        """hydrate chunk bodies for downstream rerankers (optional)"""
         self._text.update(mapping)
 
     def _expand_queries(self, q: str) -> List[str]:
@@ -88,7 +88,7 @@ class HybridRetriever:
         try:
             return self._bm25.get_relevant_documents(q)
         except Exception as e:
-            logger.warning("BM25 retrieval failed: %s", e)
+            logger.warning("bm25 retrieval failed: %s", e)
             return []
 
     def retrieve(self, query: str) -> List[Document]:
@@ -129,7 +129,7 @@ class HybridRetriever:
         ]
 
     def retrieve_with_trace(self, query: str) -> Tuple[List[Document], Dict[str, float]]:
-        """Returns (docs, rrf_scores_for_returned_ids) — enough for tracing without recomputing fusion."""
+        """returns (docs, rrf_scores_for_returned_ids) — enough for tracing without recomputing fusion"""
         docs = self.retrieve(query)
         trace = {d.metadata["doc_id"]: float(d.metadata["rrf"]) for d in docs}
         return docs, trace
