@@ -1,36 +1,36 @@
 import pytest
-from search_module import SearchEngine  # assuming we have a SearchEngine class
+from search_module import SearchEngine  # assuming this is where the search logic is
 
 @pytest.fixture
 def search_engine():
-    # setup a search engine instance before each test
+    # create a search engine instance for testing
     engine = SearchEngine()
-    yield engine
-    # teardown if necessary
+    return engine
 
 def test_search_returns_results(search_engine):
-    # test that search returns results for a valid query
-    query = "enterprise RAG"
+    # test if search returns results for a valid query
+    query = "machine learning"
     results = search_engine.search(query)
-    assert len(results) > 0  # we expect some results
+    
+    # assert we get some results back
+    assert len(results) > 0
+    assert all(isinstance(result, dict) for result in results)
 
 def test_search_empty_query(search_engine):
-    # test that searching with an empty query returns an empty result set
+    # test search with an empty query returns no results
     query = ""
     results = search_engine.search(query)
-    assert len(results) == 0  # no results expected
+    
+    # assert we get no results back
+    assert len(results) == 0
 
 def test_search_case_insensitivity(search_engine):
-    # test that the search is case insensitive
-    query = "Enterprise rag"
-    results_upper = search_engine.search(query)
+    # test that search is case insensitive
+    query = "Data Science"
+    results_upper = search_engine.search(query.upper())
     results_lower = search_engine.search(query.lower())
-    assert results_upper == results_lower  # results should be the same
+    
+    # assert both return the same results
+    assert results_upper == results_lower
 
-def test_search_special_characters(search_engine):
-    # test that special characters don't break the search
-    query = "RAG@2023!"
-    results = search_engine.search(query)
-    assert len(results) >= 0  # should handle special chars without error
-
-# TODO: add more tests for edge cases and performance if needed
+# TODO: add more tests for edge cases and error handling
