@@ -2,7 +2,7 @@
 
 from src.retriever import HybridRetriever, HybridRetrieverConfig
 from src.reranker import CrossEncoderReranker, RerankerConfig
-from typing import List
+from typing import List, Union
 
 __all__ = [
     "HybridRetriever",
@@ -11,16 +11,14 @@ __all__ = [
     "RerankerConfig",
 ]
 
-def initialize_components() -> List[str]:
+def initialize_components() -> List[Union[HybridRetriever, HybridRetrieverConfig, CrossEncoderReranker, RerankerConfig]]:
     """initialize components of the rag system"""
     try:
-        # assuming these classes have an init that could raise
         retriever = HybridRetriever()
         config = HybridRetrieverConfig()
         reranker = CrossEncoderReranker()
         reranker_config = RerankerConfig()
     except Exception as e:
-        # log the error, could be a logger setup here
         print(f"Failed to initialize components: {e}")
         return []
     
