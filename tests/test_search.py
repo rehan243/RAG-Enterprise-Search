@@ -1,35 +1,37 @@
 import pytest
-from search_module import SearchEngine  # assuming this is the module for search functionality
+from search_module import SearchEngine  # assuming this is where the search logic is
 
-# setup a fixture for the search engine
 @pytest.fixture
 def search_engine():
+    # set up a search engine instance for testing
     engine = SearchEngine()
-    # TODO: maybe seed some data here if needed
+    engine.index_data(["apple", "banana", "cherry"])  # indexing some sample data
     return engine
 
-def test_search_returns_results(search_engine):
-    query = "example search term"
-    results = search_engine.search(query)
-    # check that results are not empty
-    assert results, "search should return results for a valid query"
+def test_search_existing_term(search_engine):
+    # test searching for an existing term
+    results = search_engine.search("apple")
+    assert results == ["apple"]
 
-def test_search_returns_correct_type(search_engine):
-    query = "another term"
-    results = search_engine.search(query)
-    # check that results are of expected type
-    assert isinstance(results, list), "search results should be a list"
+def test_search_non_existing_term(search_engine):
+    # test searching for a term that doesn't exist
+    results = search_engine.search("orange")
+    assert results == []
 
-def test_search_empty_query(search_engine):
-    query = ""
-    results = search_engine.search(query)
-    # check that empty query returns no results
-    assert not results, "search with an empty query should return no results"
+def test_search_partial_term(search_engine):
+    # test searching for a term that partially matches
+    results = search_engine.search("ban")
+    assert results == ["banana"]
 
-def test_search_no_results(search_engine):
-    query = "nonexistent term"
-    results = search_engine.search(query)
-    # check that a query with no matches returns an empty list
-    assert results == [], "search for a term that doesn't exist should return an empty list"
+def test_search_case_insensitive(search_engine):
+    # test that search is case insensitive
+    results = search_engine.search("CHERRY")
+    assert results == ["cherry"]
 
-# TODO: add more tests for edge cases and different query types
+def test_index_data(search_engine):
+    # test if indexing data works properly
+    search_engine.index_data(["date"])
+    results = search_engine.search("date")
+    assert results == ["date"]
+
+# TODO: add more tests for edge cases
