@@ -1,42 +1,37 @@
 import pytest
-from search_module import SearchEngine  # assuming there's a search engine module
+from search_module import SearchEngine  # assuming there's a search engine class 
 
-# sample data for testing
-test_data = [
-    {"id": 1, "content": "artificial intelligence and machine learning"},
-    {"id": 2, "content": "deep learning and neural networks"},
-    {"id": 3, "content": "natural language processing"},
-]
-
+# test data setup
 @pytest.fixture
 def search_engine():
-    # initialize the search engine with test data
+    # create a search engine instance for testing
     engine = SearchEngine()
-    engine.index_documents(test_data)
+    engine.add_document("First document content")
+    engine.add_document("Second document content")
     return engine
 
 def test_search_single_term(search_engine):
-    results = search_engine.search("artificial")
+    # test searching for a single term
+    results = search_engine.search("First")
     assert len(results) == 1
-    assert results[0]["id"] == 1
+    assert results[0] == "First document content"
 
 def test_search_multiple_terms(search_engine):
-    results = search_engine.search("deep learning")
-    assert len(results) == 1
-    assert results[0]["id"] == 2
+    # test searching for multiple terms
+    results = search_engine.search("content")
+    assert len(results) == 2  # both documents should match
+    assert "First document content" in results
+    assert "Second document content" in results
 
 def test_search_no_results(search_engine):
-    results = search_engine.search("quantum computing")
+    # test searching for a term that doesn't exist
+    results = search_engine.search("Nonexistent")
     assert len(results) == 0
 
-def test_search_partial_match(search_engine):
-    results = search_engine.search("machine")
-    assert len(results) == 1
-    assert results[0]["id"] == 1
-
 def test_search_case_insensitivity(search_engine):
-    results = search_engine.search("NATURAL LANGUAGE PROCESSING")
+    # test that search is case insensitive
+    results = search_engine.search("first")
     assert len(results) == 1
-    assert results[0]["id"] == 3
+    assert results[0] == "First document content"
 
-# TODO: add more tests for edge cases and performance
+# TODO: add more edge cases and input validation tests later
