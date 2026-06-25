@@ -97,11 +97,15 @@ class HybridRetriever:
             return []
         dense_ids_nested: List[List[str]] = []
         for sq in subqs:
-            emb = self._embed_fn([sq])
-            if emb.shape[0] != 1:
-                raise RuntimeError("embed_fn must return one row per query")
-            ranked = self._dense_search(emb[0], self._cfg.dense_k)
-            dense_ids_nested.append([d for d, _ in ranked])
+            try:
+                emb = self._embed_fn([sq])
+                if emb.shape[0] != 1:
+                    raise RuntimeError("embed_fn must return one row per query")
+                ranked = self._dense_search(emb[0], self._cfg.dense_k)
+                dense_ids_nested.append([d for d, _ in ranked])
+            except Exception as e:
+                logger.warning("dense retrieval failed for query '%s': %s", sq, e)
+                dense_ids_nested.append([])
 
         sparse_ids_nested: List[List[str]] = []
         for sq in subqs:
