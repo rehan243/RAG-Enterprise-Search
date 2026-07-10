@@ -9,10 +9,15 @@ class ConfigLoader:
 
     def load_config(self) -> Dict[str, Any]:
         if not os.path.exists(self.config_path):
-            raise FileNotFoundError(f"Config file not found at {self.config_path}")
+            raise FileNotFoundError(f"config file not found at {self.config_path}")
         
-        with open(self.config_path, 'r') as file:
-            return json.load(file)
+        try:
+            with open(self.config_path, 'r') as file:
+                return json.load(file)
+        except json.JSONDecodeError:
+            raise ValueError(f"error decoding JSON from the config file at {self.config_path}")
+        except Exception as e:
+            raise RuntimeError(f"unexpected error occurred: {e}")
 
     def get(self, key: str, default: Any = None) -> Any:
         return self.config_data.get(key, default)
@@ -22,8 +27,11 @@ class ConfigLoader:
         self.save_config()
 
     def save_config(self) -> None:
-        with open(self.config_path, 'w') as file:
-            json.dump(self.config_data, file, indent=4)
+        try:
+            with open(self.config_path, 'w') as file:
+                json.dump(self.config_data, file, indent=4)
+        except Exception as e:
+            raise RuntimeError(f"failed to save config: {e}")
 
 # example usage
 if __name__ == "__main__":
