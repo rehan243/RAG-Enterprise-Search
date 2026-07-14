@@ -1,37 +1,48 @@
 #!/bin/bash
 
-# check for required tools
-command -v flake8 >/dev/null 2>&1 || { echo >&2 "flake8 is not installed. Aborting."; exit 1; }
-command -v pytest >/dev/null 2>&1 || { echo >&2 "pytest is not installed. Aborting."; exit 1; }
+# this script is for running development tasks like linting and testing
 
-# function for linting
-lint() {
-    echo "running flake8 for linting"
-    flake8 src/
-    if [ $? -ne 0 ]; then
-        echo "linting failed, fix issues before proceeding"
-        exit 1
-    fi
-    echo "linting passed"
+set -e  # exit on error
+
+# function to run linter
+run_linter() {
+    echo "running linter..."
+    flake8 src/  # check the src directory for style issues
+    echo "linting complete"
 }
 
-# function for testing
-test() {
-    echo "running pytest for tests"
-    pytest tests/
-    if [ $? -ne 0 ]; then
-        echo "tests failed, fix issues before proceeding"
-        exit 1
-    fi
+# function to run tests
+run_tests() {
+    echo "running tests..."
+    pytest tests/  # execute all tests in the tests directory
     echo "all tests passed"
 }
 
-# main function
-main() {
-    lint
-    test
-    echo "development checks completed successfully"
+# function to build docker image
+build_docker() {
+    echo "building docker image..."
+    docker build -t rag-enterprise-search .  # build the image with the current context
+    echo "docker image built"
 }
 
-# run main function
-main
+# parse command line arguments
+case "$1" in
+    lint)
+        run_linter
+        ;;
+    test)
+        run_tests
+        ;;
+    docker)
+        build_docker
+        ;;
+    all)
+        run_linter
+        run_tests
+        build_docker
+        ;;
+    *)
+        echo "usage: $0 {lint|test|docker|all}"  # show usage info if no valid option is provided
+        exit 1
+        ;;
+esac
