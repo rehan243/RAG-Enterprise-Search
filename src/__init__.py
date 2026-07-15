@@ -2,7 +2,7 @@
 
 from src.retriever import HybridRetriever, HybridRetrieverConfig
 from src.reranker import CrossEncoderReranker, RerankerConfig
-from typing import List, Union
+from typing import List, Union, Optional
 
 __all__ = [
     "HybridRetriever",
@@ -11,7 +11,7 @@ __all__ = [
     "RerankerConfig",
 ]
 
-def initialize_components() -> List[Union[HybridRetriever, HybridRetrieverConfig, CrossEncoderReranker, RerankerConfig]]:
+def initialize_components() -> Optional[List[Union[HybridRetriever, HybridRetrieverConfig, CrossEncoderReranker, RerankerConfig]]]:
     """initialize components of the rag system"""
     try:
         retriever = HybridRetriever()
@@ -19,8 +19,8 @@ def initialize_components() -> List[Union[HybridRetriever, HybridRetrieverConfig
         reranker = CrossEncoderReranker()
         reranker_config = RerankerConfig()
     except Exception as e:
-        print(f"Failed to initialize components: {e}")
-        return []
+        print(f"failed to initialize components: {e}")
+        return None  # returning None to indicate failure
     
     return [retriever, config, reranker, reranker_config]  # returning initialized components for further use
 
