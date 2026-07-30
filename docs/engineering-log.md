@@ -10,3 +10,7 @@ I've been experimenting with different chunking strategies for my retrieval-augm
 ### 2026-07-23
 
 Reviewed retrieval quality, chunking, and hybrid search today. Reinforced that measuring the change end-to-end beats reasoning about it in isolation — the numbers rarely match the intuition.
+
+### 2026-07-30
+
+Noticed that smaller chunk sizes (e.g., 200 tokens) improve retrieval precision but significantly increase the number of chunks, which impacts search latency. Balancing chunk size is key: larger chunks reduce total chunks and improve speed but sometimes hurt retrieval granularity, especially with hybrid search combining dense and sparse vectors.
