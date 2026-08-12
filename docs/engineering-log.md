@@ -22,3 +22,7 @@ Reviewed retrieval quality, chunking, and hybrid search today. Reinforced that m
 ### 2026-08-10
 
 Reviewed retrieval quality, chunking, and hybrid search today. Reinforced that measuring the change end-to-end beats reasoning about it in isolation — the numbers rarely match the intuition.
+
+### 2026-08-12
+
+Reviewed retrieval quality, chunking, and hybrid search today. Reinforced that measuring the change end-to-end beats reasoning about it in isolation — the numbers rarely match the intuition.
